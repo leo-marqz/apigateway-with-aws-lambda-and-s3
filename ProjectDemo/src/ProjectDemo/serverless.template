@@ -1,0 +1,105 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "An AWS Serverless Application. This template is partially managed by Amazon.Lambda.Annotations (v1.3.0.0).",
+  "Resources": {
+    "ProjectDemoFunctionsUploadGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootPost"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet8",
+        "CodeUri": ".",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole"
+        ],
+        "Role": "arn:aws:iam::471112617336:role/AWSLambdaWithAmazonS3Role",
+        "PackageType": "Zip",
+        "Handler": "ProjectDemo::ProjectDemo.Functions_Upload_Generated::Upload",
+        "Events": {
+          "RootPost": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/upload",
+              "Method": "POST"
+            }
+          }
+        }
+      }
+    },
+    "ProjectDemoFunctionsDownloadGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet8",
+        "CodeUri": ".",
+        "MemorySize": 512,
+        "Timeout": 60,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole"
+        ],
+        "Role": "arn:aws:iam::471112617336:role/AWSLambdaWithAmazonS3Role",
+        "PackageType": "Zip",
+        "Handler": "ProjectDemo::ProjectDemo.Functions_Download_Generated::Download",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/download/key/{keyname}",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "ProjectDemoFunctionsGetAllGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet8",
+        "CodeUri": ".",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole"
+        ],
+        "Role": "arn:aws:iam::471112617336:role/AWSLambdaWithAmazonS3Role",
+        "PackageType": "Zip",
+        "Handler": "ProjectDemo::ProjectDemo.Functions_GetAll_Generated::GetAll",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "ApiURL": {
+      "Description": "API endpoint URL for Prod environment",
+      "Value": {
+        "Fn::Sub": "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/"
+      }
+    }
+  }
+}
