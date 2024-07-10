@@ -3,7 +3,86 @@
   "Transform": "AWS::Serverless-2016-10-31",
   "Description": "An AWS Serverless Application. This template is partially managed by Amazon.Lambda.Annotations (v1.3.0.0).",
   "Resources": {
-    "ProjectDemoFunctionsUploadGenerated": {
+    "ServerlessHttpApi": {
+      "Type": "AWS::Serverless::HttpApi",
+      "Properties": {
+        "CorsConfiguration": {
+          "AllowOrigins": [
+            "*"
+          ],
+          "AllowMethods": [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE"
+          ],
+          "AllowHeaders": [
+            "Content-Type"
+          ]
+        }
+      }
+    },
+    "ProjectDemoFunctionsListBucketsGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet8",
+        "CodeUri": ".",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole"
+        ],
+        "Role": "arn:aws:iam::471112617336:role/AWSLambdaWithAmazonS3Role",
+        "PackageType": "Zip",
+        "Handler": "ProjectDemo::ProjectDemo.Functions_ListBuckets_Generated::ListBuckets",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/api/s3/list-all-buckets",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "ProjectDemoFunctionsListObjectsFromBucketGenerated": {
+      "Type": "AWS::Serverless::Function",
+      "Metadata": {
+        "Tool": "Amazon.Lambda.Annotations",
+        "SyncedEvents": [
+          "RootGet"
+        ]
+      },
+      "Properties": {
+        "Runtime": "dotnet8",
+        "CodeUri": ".",
+        "MemorySize": 512,
+        "Timeout": 30,
+        "Policies": [
+          "AWSLambdaBasicExecutionRole"
+        ],
+        "Role": "arn:aws:iam::471112617336:role/AWSLambdaWithAmazonS3Role",
+        "PackageType": "Zip",
+        "Handler": "ProjectDemo::ProjectDemo.Functions_ListObjectsFromBucket_Generated::ListObjectsFromBucket",
+        "Events": {
+          "RootGet": {
+            "Type": "HttpApi",
+            "Properties": {
+              "Path": "/api/s3/{bucket}/list-all-objects",
+              "Method": "GET"
+            }
+          }
+        }
+      }
+    },
+    "ProjectDemoFunctionsUploadObjectToBucketGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
         "Tool": "Amazon.Lambda.Annotations",
@@ -21,19 +100,19 @@
         ],
         "Role": "arn:aws:iam::471112617336:role/AWSLambdaWithAmazonS3Role",
         "PackageType": "Zip",
-        "Handler": "ProjectDemo::ProjectDemo.Functions_Upload_Generated::Upload",
+        "Handler": "ProjectDemo::ProjectDemo.Functions_UploadObjectToBucket_Generated::UploadObjectToBucket",
         "Events": {
           "RootPost": {
             "Type": "HttpApi",
             "Properties": {
-              "Path": "/upload",
+              "Path": "/api/s3/{bucket}/upload-object",
               "Method": "POST"
             }
           }
         }
       }
     },
-    "ProjectDemoFunctionsDownloadGenerated": {
+    "ProjectDemoFunctionsDownloadObjectFromBucketGenerated": {
       "Type": "AWS::Serverless::Function",
       "Metadata": {
         "Tool": "Amazon.Lambda.Annotations",
@@ -45,48 +124,18 @@
         "Runtime": "dotnet8",
         "CodeUri": ".",
         "MemorySize": 512,
-        "Timeout": 60,
+        "Timeout": 30,
         "Policies": [
           "AWSLambdaBasicExecutionRole"
         ],
         "Role": "arn:aws:iam::471112617336:role/AWSLambdaWithAmazonS3Role",
         "PackageType": "Zip",
-        "Handler": "ProjectDemo::ProjectDemo.Functions_Download_Generated::Download",
+        "Handler": "ProjectDemo::ProjectDemo.Functions_DownloadObjectFromBucket_Generated::DownloadObjectFromBucket",
         "Events": {
           "RootGet": {
             "Type": "HttpApi",
             "Properties": {
-              "Path": "/download/key/{keyname}",
-              "Method": "GET"
-            }
-          }
-        }
-      }
-    },
-    "ProjectDemoFunctionsGetAllGenerated": {
-      "Type": "AWS::Serverless::Function",
-      "Metadata": {
-        "Tool": "Amazon.Lambda.Annotations",
-        "SyncedEvents": [
-          "RootGet"
-        ]
-      },
-      "Properties": {
-        "Runtime": "dotnet8",
-        "CodeUri": ".",
-        "MemorySize": 1024,
-        "Timeout": 60,
-        "Policies": [
-          "AWSLambdaBasicExecutionRole"
-        ],
-        "Role": "arn:aws:iam::471112617336:role/AWSLambdaWithAmazonS3Role",
-        "PackageType": "Zip",
-        "Handler": "ProjectDemo::ProjectDemo.Functions_GetAll_Generated::GetAll",
-        "Events": {
-          "RootGet": {
-            "Type": "HttpApi",
-            "Properties": {
-              "Path": "/",
+              "Path": "/api/s3/{bucket}/download-object/{key}",
               "Method": "GET"
             }
           }
