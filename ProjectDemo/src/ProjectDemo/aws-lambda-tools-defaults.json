@@ -13,6 +13,6 @@
     "template"      : "serverless.template",
     "template-parameters" : "",
     "docker-host-build-output-dir" : "./bin/Release/lambda-publish",
-    "s3-bucket"                    : "lm-stack-deploys",
+    "s3-bucket"                    : "lm-deploys",
     "stack-name"                   : "ProyectApiLambdaDemo"
 }
